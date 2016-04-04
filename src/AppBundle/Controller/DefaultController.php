@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Clientes;
 use AppBundle\Entity\Departamentos;
+use AppBundle\Entity\Productos;
+use AppBundle\Form\ProductosType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,41 +17,27 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $em           = $this->getDoctrine()->getManager();
+        $productosRep = $em->getRepository('AppBundle:Productos');
 
-        $departamento = $em->getRepository('AppBundle:Departamentos')->findOneById(2);
-        $usuario      = $em->getRepository('AppBundle:Clientes')->findOneByNombre('Andrés');
+        $producto = new Productos();
 
-        $usuario->setDepartamentos($departamento);
+        $form = $this->createForm(ProductosType::class, $producto);
 
-        // $em->persist($usuario);
-        $em->flush();
-exit;
-        // $departamento = new Departamentos();
-        // $departamento->setNombre('Calidad');
-        // $departamento->setDescripcion('');
-        // $em->persist($departamento);
-        // $em->flush();
+        if ($request->getMethod() === 'POST') {
+            $form->handleRequest($request);
 
-        // echo $departamento->getId();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $em->persist($producto);
+                $em->flush();
+            }
+        }
 
-        $cliente = new Clientes();
+        $productos = $productosRep->findAll();
 
-        echo $departamento->getNombre();
-
-
-        // Establecemos los datos a guardar o modificar
-        $cliente->setNombre('Luis');
-        $cliente->setApellidos('Cetz');
-        $cliente->setEmail('luisitoEmoxito@gmail.com');
-        $cliente->setTelefono('999999999');
-        $cliente->setDepartamentos($departamento);
-
-        // Deja en espera a la entidad
-        $em->persist($cliente);
-
-        // Guarda en la base de datos
-        $em->flush();
-        exit;
+        return $this->render(
+            'default/index.html.twig',
+            array('productos' => $productos, 'form' => $form->createView())
+        );
     }
 }

@@ -51,6 +51,13 @@ class Productos
     private $stock;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="precio_venta", type="decimal", precision=10, scale=2)
+     */
+    private $precioVenta;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -218,10 +225,33 @@ class Productos
     /**
      * Get clientesProductos
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getClientesProductos()
     {
         return $this->clientesProductos;
+    }
+
+    /**
+     * Set precioVenta
+     *
+     * @param string $precioVenta
+     * @return Productos
+     */
+    public function setPrecioVenta($precioVenta)
+    {
+        $this->precioVenta = $precioVenta;
+
+        return $this;
+    }
+
+    /**
+     * Get precioVenta
+     *
+     * @return string 
+     */
+    public function getPrecioVenta()
+    {
+        return $this->precioVenta;
     }
 }
