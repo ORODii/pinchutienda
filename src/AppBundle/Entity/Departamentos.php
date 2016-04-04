@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,11 +36,20 @@ class Departamentos
      */
     private $descripcion;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Clientes", mappedBy="departamentos")
+     */
+    private $clientes;
+
+    public function __construct()
+    {
+        $this->clientes = new ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +72,7 @@ class Departamentos
     /**
      * Get nombre
      *
-     * @return string 
+     * @return string
      */
     public function getNombre()
     {
@@ -85,10 +95,43 @@ class Departamentos
     /**
      * Get descripcion
      *
-     * @return string 
+     * @return string
      */
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+
+    /**
+     * Add clientes
+     *
+     * @param \AppBundle\Entity\Clientes $clientes
+     * @return Departamentos
+     */
+    public function addCliente(\AppBundle\Entity\Clientes $clientes)
+    {
+        $this->clientes[] = $clientes;
+
+        return $this;
+    }
+
+    /**
+     * Remove clientes
+     *
+     * @param \AppBundle\Entity\Clientes $clientes
+     */
+    public function removeCliente(\AppBundle\Entity\Clientes $clientes)
+    {
+        $this->clientes->removeElement($clientes);
+    }
+
+    /**
+     * Get clientes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getClientes()
+    {
+        return $this->clientes;
     }
 }

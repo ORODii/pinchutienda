@@ -51,7 +51,7 @@ class Clientes
     private $telefono;
 
     /**
-     * @ORM\OneToOne(targetEntity="Departamentos")
+     * @ORM\ManyToOne(targetEntity="Departamentos", inversedBy="clientes")
      */
     private $departamentos;
 
@@ -216,7 +216,7 @@ class Clientes
     /**
      * Get clientesProductos
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getClientesProductos()
     {
